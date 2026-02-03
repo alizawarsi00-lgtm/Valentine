@@ -3,106 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Message for You</title>
+    <title>A Special Message</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body { background-color: #fce4ec; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; position: relative; }
-        .container { text-align: center; padding: 20px; max-width: 400px; z-index: 10; background: rgba(255, 255, 255, 0.3); border-radius: 20px; backdrop-filter: blur(5px); }
-        img { height: 200px; border-radius: 15px; margin-bottom: 20px; }
-        h1 { color: #880e4f; font-size: 1.5rem; line-height: 1.4; }
-        .buttons { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px; }
-        .btn { border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 16px; }
-        .yes-btn { background-color: #ec407a; color: white; }
-        .no-btn { background-color: #9e9e9e; color: white; }
+        .container { text-align: center; padding: 30px; max-width: 400px; z-index: 10; background: white; border-radius: 30px; box-shadow: 0 15px 35px rgba(214, 51, 132, 0.2); }
+        
+        /* The "Sticker" replacement */
+        .sticker { font-size: 80px; display: block; margin-bottom: 20px; animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        h1 { color: #880e4f; font-size: 1.4rem; line-height: 1.5; margin-bottom: 20px; }
+        .buttons { display: flex; justify-content: center; align-items: center; gap: 15px; flex-direction: column; }
+        .btn { border: none; padding: 15px 30px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 16px; width: 80%; }
         .next-btn { background-color: #ad1457; color: white; }
+        .yes-btn { background-color: #ec407a; color: white; display: none; }
+        .no-btn { background-color: #eeeeee; color: #880e4f; display: none; }
+        
+        /* Sparkle & Hearts */
+        .sparkle { display: inline-block; color: #d81b60; font-weight: 600; animation: glow 1s infinite; }
+        @keyframes glow { 0%, 100% { text-shadow: 0 0 5px #ffeb3b; } 50% { text-shadow: 0 0 20px #ff4081; } }
+        .heart { position: absolute; top: -10%; color: #ff4081; font-size: 25px; user-select: none; animation: fall linear forwards; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
         .hidden { display: none; }
-
-        /* Sparkle Animation for the Date */
-        .sparkle {
-            display: inline-block;
-            color: #d81b60;
-            font-weight: 600;
-            animation: sparkle-effect 1.2s infinite;
-        }
-
-        @keyframes sparkle-effect {
-            0%, 100% { transform: scale(1); text-shadow: 0 0 5px #fff, 0 0 10px #ffeb3b; }
-            50% { transform: scale(1.1); text-shadow: 0 0 15px #fff, 0 0 25px #ff4081; }
-        }
-
-        /* Heart Rain Animation */
-        .heart {
-            position: absolute;
-            top: -10%;
-            color: #ff4081;
-            font-size: 20px;
-            user-select: none;
-            z-index: 1;
-            animation: fall linear forwards;
-        }
-
-        @keyframes fall {
-            to { transform: translateY(110vh) rotate(360deg); }
-        }
     </style>
 </head>
 <body>
 
-    <div class="container" id="main-card">
-        <div id="story-section">
-            <img id="story-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/K676T08HefYv6/giphy.gif">
-            <h1 id="story-text">Remember our first date at Meat the Cheese? 🧀</h1>
-            <div class="buttons">
-                <button class="btn next-btn" onclick="nextStep()">Next... ❤️</button>
-            </div>
-        </div>
-
-        <div id="question-section" class="hidden">
-            <img id="question-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L95W4wv8nNb9SaAXPQ/giphy.gif">
-            <h1 id="question">Will you be my Valentine? ❤️</h1>
-            <div class="buttons" id="action-buttons">
-                <button class="btn yes-btn" id="yesBtn" onclick="celebrate()">Yes</button>
-                <button class="btn no-btn" id="noBtn" onclick="growYes()">No</button>
-            </div>
+    <div class="container">
+        <span id="sticker" class="sticker">🧀</span>
+        <h1 id="main-text">Remember our first date at Meat the Cheese?</h1>
+        
+        <div class="buttons">
+            <button id="nextBtn" class="btn next-btn" onclick="nextStep()">Next... ❤️</button>
+            <button id="yesBtn" class="btn yes-btn" onclick="celebrate()">Yes</button>
+            <button id="noBtn" class="btn no-btn" onclick="growYes()">No</button>
         </div>
     </div>
 
     <script>
-        let currentStep = 0;
-        const storyTexts = [
-            "Ever since that day, I'm unable to stop thinking about you.",
-            "I like you so, so much. ❤️",
-            "So I have to ask..."
-        ];
-        
-        // These are more reliable sticker URLs
-        const storyGifs = [
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBqN2N6N2N6N2N6N2N6N2N6N2N6N2N6N2N6N2N6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/MDJ9IbxxvDUQM/giphy.gif",
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/14412/giphy.gif",
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/Y4THTR92hP9qE/giphy.gif"
+        let step = 0;
+        const story = [
+            { text: "Ever since that day, I'm unable to stop thinking about you.", emoji: "💭" },
+            { text: "I like you so, so much. ❤️", emoji: "🥰" },
+            { text: "So I have to ask...", emoji: "🤫" }
         ];
 
         function nextStep() {
-            if (currentStep < storyTexts.length) {
-                document.getElementById("story-text").textContent = storyTexts[currentStep];
-                document.getElementById("story-gif").src = storyGifs[currentStep];
-                currentStep++;
+            if (step < story.length) {
+                document.getElementById("main-text").textContent = story[step].text;
+                document.getElementById("sticker").textContent = story[step].emoji;
+                step++;
             } else {
-                document.getElementById("story-section").classList.add("hidden");
-                document.getElementById("question-section").classList.remove("hidden");
+                document.getElementById("main-text").textContent = "Will you be my Valentine? ❤️";
+                document.getElementById("sticker").textContent = "💍";
+                document.getElementById("nextBtn").style.display = "none";
+                document.getElementById("yesBtn").style.display = "block";
+                document.getElementById("noBtn").style.display = "block";
             }
         }
-
-        let noMessages = ["Are you sure?", "Really sure?", "Think about the cheese!", "Don't do this! 🥺"];
-        let noIndex = 0;
 
         function growYes() {
             const yesBtn = document.getElementById("yesBtn");
             const noBtn = document.getElementById("noBtn");
-            noBtn.textContent = noMessages[noIndex];
-            noIndex = (noIndex + 1) % noMessages.length;
             const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-            yesBtn.style.fontSize = (currentSize * 1.5) + "px";
+            
+            const noTexts = ["Are you sure?", "Really?", "Pleease?", "🧀??"];
+            noBtn.textContent = noTexts[Math.floor(Math.random() * noTexts.length)];
+            
+            yesBtn.style.fontSize = (currentSize * 1.4) + "px";
+            yesBtn.style.padding = (currentSize * 1.2) + "px";
+        }
+
+        function celebrate() {
+            document.getElementById("main-text").innerHTML = "Yay! 😍<br><br>Let’s get married on <span class='sparkle'>26th March!</span> 💍";
+            document.getElementById("sticker").textContent = "👩‍❤️‍👨";
+            document.getElementById("yesBtn").style.display = "none";
+            document.getElementById("noBtn").style.display = "none";
+            document.body.style.backgroundColor = "#f8bbd0";
+            setInterval(createHeart, 300);
         }
 
         function createHeart() {
@@ -112,15 +91,7 @@
             heart.style.left = Math.random() * 100 + "vw";
             heart.style.animationDuration = Math.random() * 2 + 3 + "s";
             document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
-        }
-
-        function celebrate() {
-            document.getElementById("question").innerHTML = "Yay! 😍<br><br>Let’s get married on <span class='sparkle'>26th March!</span> 💍";
-            document.getElementById("question-gif").src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/v4aGOHe3HihpXv8pE6/giphy.gif";
-            document.getElementById("action-buttons").classList.add("hidden");
-            document.body.style.backgroundColor = "#ffc1e3";
-            setInterval(createHeart, 300); // Trigger Heart Rain
+            setTimeout(() => heart.remove(), 5000);
         }
     </script>
 </body>
