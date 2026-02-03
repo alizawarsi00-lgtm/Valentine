@@ -5,16 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>A Special Message for You</title>
     <style>
-        body { background-color: #fce4ec; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; }
-        .container { text-align: center; padding: 20px; max-width: 400px; }
+        body { background-color: #fce4ec; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; font-family: 'Poppins', sans-serif; overflow: hidden; position: relative; }
+        .container { text-align: center; padding: 20px; max-width: 400px; z-index: 10; }
         img { height: 200px; border-radius: 15px; margin-bottom: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         h1 { color: #880e4f; font-size: 1.5rem; line-height: 1.4; transition: all 0.5s ease; }
-        .buttons { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px; flex-wrap: wrap; }
+        .buttons { display: flex; justify-content: center; align-items: center; gap: 15px; margin-top: 30px; }
         .btn { border: none; padding: 12px 25px; border-radius: 50px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 16px; }
         .yes-btn { background-color: #ec407a; color: white; box-shadow: 0 4px 15px rgba(236, 64, 122, 0.4); }
         .no-btn { background-color: #9e9e9e; color: white; }
         .next-btn { background-color: #ad1457; color: white; }
         .hidden { display: none; }
+
+        /* Sparkle & Celebration Effects */
+        .sparkle {
+            display: inline-block;
+            color: #d81b60;
+            font-weight: bold;
+            animation: sparkle-effect 1.5s infinite;
+            text-shadow: 0 0 10px #fff, 0 0 20px #ffeb3b;
+        }
+
+        @keyframes sparkle-effect {
+            0%, 100% { transform: scale(1); text-shadow: 0 0 10px #fff; }
+            50% { transform: scale(1.1); text-shadow: 0 0 20px #fff, 0 0 30px #ff4081; }
+        }
+
+        /* Heart Rain Styling */
+        .heart {
+            position: absolute;
+            top: -10%;
+            color: #ff4081;
+            font-size: 20px;
+            user-select: none;
+            z-index: 1;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(110vh) rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -29,7 +58,7 @@
         </div>
 
         <div id="question-section" class="hidden">
-            <img id="question-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbm56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/26FLdmIp6wJr91JAI/giphy.gif">
+            <img id="question-gif" src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExZ3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/L95W4wv8nNb9SaAXPQ/giphy.gif">
             <h1 id="question">Will you be my Valentine? ❤️</h1>
             <div class="buttons" id="action-buttons">
                 <button class="btn yes-btn" id="yesBtn" onclick="celebrate()">Yes</button>
@@ -45,11 +74,10 @@
             "I like you so, so much. ❤️",
             "So I have to ask..."
         ];
-        
         const storyGifs = [
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbTBqN2N6N2N6N2N6N2N6N2N6N2N6N2N6N2N6N2N6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/MDJ9IbxxvDUQM/giphy.gif",
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/14412/giphy.gif",
-            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/Y4THTR92hP9qE/giphy.gif"
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/13XjnBISI8YmJG/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/c76IJLufpNUMo/giphy.gif",
+            "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/Y4THTR92hP9qE/giphy.gif"
         ];
 
         function nextStep() {
@@ -63,30 +91,34 @@
             }
         }
 
-        let noMessages = ["Are you sure?", "Really sure?", "Pleeaaase?", "Don't do this!", "Look at my face 🥺"];
+        let noMessages = ["Are you sure?", "Really sure?", "Think about the cheese!", "Don't do this! 🥺"];
         let noIndex = 0;
 
         function growYes() {
             const yesBtn = document.getElementById("yesBtn");
             const noBtn = document.getElementById("noBtn");
-            
-            // Change No button text
             noBtn.textContent = noMessages[noIndex];
             noIndex = (noIndex + 1) % noMessages.length;
-
-            // Make Yes button huge
             const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
-            yesBtn.style.fontSize = (currentSize * 1.4) + "px";
-            yesBtn.style.padding = "20px 40px";
+            yesBtn.style.fontSize = (currentSize * 1.5) + "px";
+        }
+
+        function createHeart() {
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random() * 100 + "vw";
+            heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 5000);
         }
 
         function celebrate() {
-            document.getElementById("question").innerHTML = "Yay! 😍<br><br>Let’s get married on 26th March! 💍";
-            document.getElementById("question-gif").src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHR6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/c76IJLufpNUMo/giphy.gif";
+            document.getElementById("question").innerHTML = "Yay! 😍<br><br>Let’s get married on <span class='sparkle'>26th March!</span> 💍";
+            document.getElementById("question-gif").src = "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueG56Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6Z3R6JmVwPXYxX2ludGVybmFsX2dpZl9ieV9pZCZjdD1z/v4aGOHe3HihpXv8pE6/giphy.gif";
             document.getElementById("action-buttons").classList.add("hidden");
-            
-            // Background color change for celebration
             document.body.style.backgroundColor = "#ffc1e3";
+            setInterval(createHeart, 300); // Start heart rain
         }
     </script>
 </body>
